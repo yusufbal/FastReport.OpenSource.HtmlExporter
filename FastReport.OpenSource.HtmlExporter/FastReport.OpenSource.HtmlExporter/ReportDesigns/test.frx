@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="05/21/2021 14:55:28" ReportInfo.Modified="04/02/2022 13:50:56" ReportInfo.CreatorVersion="2020.3.7.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+     
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <BusinessObjectDataSource Name="TestReportDataModel" ReferenceName="TestReportDataModel" DataType="null" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+    </BusinessObjectDataSource>
+  </Dictionary>
+  <ReportPage Name="Page2" Watermark.Font="Arial, 60pt">
+    <PageHeaderBand Name="PageHeader2" Width="718.2" Height="28.35">
+      <TextObject Name="Text1" Left="9.45" Width="680.4" Height="28.35" Text="TEST REPORT" Font="Arial, 18pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="32.65" Width="718.2" Height="37.8" DataSource="TestReportDataModel">
+      <TextObject Name="Text2" Left="9.45" Top="9.45" Width="680.4" Height="18.9" Text="Row number of the report data for testing html to pdf export without PdfSimple Plugin:[TestReportDataModel.Id]" Font="Arial, 10pt"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="74.75" Width="718.2" Height="18.9"/>
+  </ReportPage>
+</Report>

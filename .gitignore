@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/FastReport.OpenSource.HtmlExporter/.vs/FastReport.OpenSource.HtmlExporter
+/FastReport.OpenSource.HtmlExporter/FastReport.OpenSource.HtmlExporter/bin/Debug/net5.0
+/FastReport.OpenSource.HtmlExporter/FastReport.OpenSource.HtmlExporter/obj
+/FastReport.OpenSource.HtmlExporter/FastReport.OpenSource.HtmlExporter.Core/bin/Debug/net5.0
+/FastReport.OpenSource.HtmlExporter/FastReport.OpenSource.HtmlExporter.Core/obj
