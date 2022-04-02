@@ -15,4 +15,4 @@ You can compare versions from: https://www.fast-report.com/en/fast-report-compar
 If you want to find a solution for this problem without going to the paid version, you can solve the problem by getting help from the itext7 library.
 
 In this application, we will create the report outputs that we will create with FastReport as html and convert them to pdf with the itext7 library.
-
+ First you must add FastReport.Compat, FastReport.OpenSource, itext7, itext7.pdfhtml packages from nuget. 
