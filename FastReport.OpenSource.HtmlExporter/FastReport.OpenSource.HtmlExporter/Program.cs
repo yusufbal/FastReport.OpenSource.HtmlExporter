@@ -27,7 +27,7 @@ namespace FastReport.OpenSource.HtmlExporter
         {
             var data = GenerateData();
             var fastReportGenerator = new FastReportGenerator<TestReportDataModel>(ReportUtils.DesignerPath, "test.frx");
-            var report = fastReportGenerator.GeneratePdfFromHtml(data,PageSize.A4);
+            var report = fastReportGenerator.GeneratePdfFromHtml(data);
             ExportToFile(report, "testWithoutPdfSimple");
         }
 

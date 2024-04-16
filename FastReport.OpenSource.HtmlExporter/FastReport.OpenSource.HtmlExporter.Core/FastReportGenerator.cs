@@ -69,8 +69,9 @@ namespace FastReport.OpenSource.HtmlExporter.Core
             }
         }
 
-        public string GenerateHtml(List<T> model)
+        public string GenerateHtml(List<T> model, out List<ReportPage> pages)
         {
+            pages = new List<ReportPage>();
             var report = CreateReportWithData(model);
             if (report.Report.Prepare())
             {
@@ -80,6 +81,10 @@ namespace FastReport.OpenSource.HtmlExporter.Core
                 {
                     export.EmbedPictures = true;
                     export.Export(report, ms);
+                    for (int i = 0; i < report.Report.PreparedPages.Count; i++)
+                    {
+                        pages.Add(report.Report.PreparedPages.GetPage(i));
+                    }
                     ms.Flush();
                     return Encoding.UTF8.GetString(ms.ToArray());
                 }
@@ -87,20 +92,18 @@ namespace FastReport.OpenSource.HtmlExporter.Core
             return string.Empty;
         }
 
-        public byte[] GeneratePdfFromHtml(T model, PageSize pageSize)
+        public byte[] GeneratePdfFromHtml(T model)
         {
             var data = new List<T>();
             data.Add(model);
-            return GeneratePdfFromHtml(data, pageSize);
+            return GeneratePdfFromHtml(data);
         }
 
-        public byte[] GeneratePdfFromHtml(List<T> model, PageSize pageSize)
+        public byte[] GeneratePdfFromHtml(List<T> model)
         {
-            var reportHtml = GenerateHtml(model);
-            if (string.IsNullOrEmpty(reportHtml))
-            {
+            var reportHtml = GenerateHtml(model, out var pages);
+            if (string.IsNullOrEmpty(reportHtml) || pages.Count == 0)
                 return null;
-            }
             using (var workStream = new MemoryStream())
             {
                 using (var pdfWriter = new PdfWriter(workStream))
@@ -110,15 +113,19 @@ namespace FastReport.OpenSource.HtmlExporter.Core
                     converterProperties.SetTagWorkerFactory(new CustomTagWorkerFactory());
                     converterProperties.SetFontProvider(fontProvider);
                     var pdfDocument = new PdfDocument(pdfWriter);
-                    pdfDocument.SetDefaultPageSize(pageSize);
+                    pdfDocument.SetDefaultPageSize(Utils.GetPageSizeFromMilimeters(pages[0].PaperWidth, pages[0].PaperHeight));
                     var elements = HtmlConverter.ConvertToElements(reportHtml, converterProperties);
-                    var document = new Document(pdfDocument, pageSize);
-                    document.SetMargins(0, 0, 0, 0);
+                    var document = new Document(pdfDocument);
+                    document.SetMargins(pages[0].TopMargin, pages[0].RightMargin, pages[0].BottomMargin, pages[0].LeftMargin);
                     int elementIndex = 0;
+                    int pageIndex = 0;
                     foreach (IElement element in elements)
                     {
                         if (element.HasProperty(Utils.PageDivProperty) && elementIndex > 0)
                         {
+                            pageIndex++;
+                            pdfDocument.SetDefaultPageSize(Utils.GetPageSizeFromMilimeters(pages[pageIndex].PaperWidth, pages[pageIndex].PaperHeight));
+                            document.SetMargins(pages[pageIndex].TopMargin, pages[pageIndex].RightMargin, pages[pageIndex].BottomMargin, pages[pageIndex].LeftMargin);
                             document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                         }
                         document.Add((IBlockElement)element);
@@ -129,6 +136,5 @@ namespace FastReport.OpenSource.HtmlExporter.Core
                 }
             }
         }
-
     }
 }
